@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.secrets.gradle.plugin)
 }
 
 android {
@@ -14,6 +15,8 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+
+        //buildConfigField("String", "MAPS_API_KEY", "\"${secrets.get("MAPS_API_KEY")}\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -37,6 +40,18 @@ android {
     buildFeatures {
         compose = true
     }
+}
+
+secrets {
+    // Define the properties file that contains your secrets
+    propertiesFileName = "secrets.properties"
+
+    // Define a default properties file that can be checked into version control
+    defaultPropertiesFileName = "local.defaults.properties"
+
+    // Optional: Ignore certain keys (e.g., sdk.dir)
+    ignoreList.add("sdk.dir")
+    ignoreList.add("keyToIgnore")
 }
 
 dependencies {
